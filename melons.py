@@ -23,30 +23,24 @@ class AbstractMelonOrder(object):
             """Uses random integer to get base price"""
             base_price = random.randint(5, 9)
 
-            print base_price
+            today = datetime.datetime.now()
+            weekday = today.weekday()
+            hour_now = today.hour
 
-            i = datetime.datetime.now()
-            today = datetime.date.today()
-            day_of_week = datetime.date.weekday(today)
-            hour_now = i.hour
-
-            if day_of_week in range(0, 5) and hour_now in range(8, 12):
+            if weekday in range(0, 5) and hour_now in range(8, 12):
                 base_price += 4
 
-            print today
-            print day_of_week
-            print hour_now
-
+            print weekday
             return base_price
 
-        base_price = get_base_price()
-
-        if self.species == "christmas melon":
-            base_price *= 1.5
-
-        total = (1 + self.tax) * self.qty * base_price
-
-        return total
+        if self.qty <= 100:
+            base_price = get_base_price()
+            if self.species == "christmas melon":
+                base_price *= 1.5
+            total = (1 + self.tax) * self.qty * base_price
+            return total
+        else:
+            raise TooManyMelonsError("Too many melons!")
 
 
     def mark_shipped(self):
@@ -96,3 +90,7 @@ class GovernmentMelonOrder(AbstractMelonOrder):
         """Record the fact that the melon has passed inspection."""
 
         self.passed_inspection = passed
+
+
+class TooManyMelonsError(ValueError):
+    pass
