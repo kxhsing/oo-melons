@@ -2,6 +2,9 @@
 
 import random
 
+import datetime
+import time
+
 class AbstractMelonOrder(object):
     """An abstract base class that other Melon Orders inherit from."""
 
@@ -19,6 +22,20 @@ class AbstractMelonOrder(object):
         def get_base_price():
             """Uses random integer to get base price"""
             base_price = random.randint(5, 9)
+
+            print base_price
+
+            i = datetime.datetime.now()
+            today = datetime.date.today()
+            day_of_week = datetime.date.weekday(today)
+            hour_now = i.hour
+
+            if day_of_week in range(0, 5) and hour_now in range(8, 12):
+                base_price += 4
+
+            print today
+            print day_of_week
+            print hour_now
 
             return base_price
 
